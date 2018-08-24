@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.MailMapper">
+	<sql id="result">
+		ID,NAME,MATTER,STATE,DATE,SEID,FILENAME,REID,SIGN
+	</sql>
+	<resultMap type="Mail" id="resultmap1">
+		<id column="ID" property="id" />
+		<result column="NAME" property="name" />
+		<result column="MATTER" property="matter" />
+		<result column="STATE" property="state" />
+		<result column="DATE" property="date" />
+		<result column="SEID" property="seid" />
+		<result column="FILENAME" property="filename" />
+		<result column="REID" property="reid" />
+		<result column="SIGN" property="sign" />
+	</resultMap>
+	<insert id="insertMail" parameterType="Mail">
+		insert into
+		MAIL(NAME,MATTER,STATE,SEID,FILENAME,REID,DATE,SIGN)values(#{name},#{matter},#{state},#{seid},#{filename},#{reid},#{date},#{sign})
+	</insert>
+	<delete id="deleteMail" parameterType="Mail">
+		delete from MAIL where
+		ID=#{id}
+	</delete>
+	<select id="selectByReid" parameterType="int" resultMap="resultmap1">
+		select
+		<include refid="result"></include>
+		from MAIL where REID=#{id}
+	</select>
+	<select id="selectByUid" parameterType="int" resultMap="resultmap1">
+		select
+		<include refid="result"></include>
+		from MAIL where SEID=#{id}
+	</select>
+	<update id="update" parameterType="Mail">
+		update MAIL
+		<set>
+			<if test="state!=null">STATE=#{state},</if>
+			<if test="seid!=null">SEID=#{seid},</if>
+			<if test="reid!=null">REID=#{reid},</if>
+			<if test="sign!=null">SIGN=#{sign}</if>
+		</set>
+		<where>
+			ID=#{id}
+		</where>
+	</update>
+</mapper>

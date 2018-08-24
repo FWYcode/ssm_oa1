@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.UserMapper">
+	<sql id="result">
+		id,name,pass,address,age,phone,power,sex
+	</sql>
+	<resultMap type="User" id="resultMap1">
+		<id column="ID" property="id" />
+		<result column="name" property="name" />
+		<result column="pass" property="pass" />
+		<result column="address" property="address" />
+		<result column="age" property="age" />
+		<result column="phone" property="phone" />
+		<result column="power" property="power" />
+		<result column="sex" property="sex" />
+		<collection property="lis" column="ID" ofType="Mail"
+			select="mapper.MailMapper.selectByReid">
+		</collection>
+		<collection property="leavets" column="id" ofType="Leaveren"
+			select="mapper.LeaveMapper.selectByApid">
+		</collection>
+		<collection property="pleaas" column="id" ofType="Leaveren" select="mapper.LeaveMapper.selectByRevid"></collection>
+
+	</resultMap>
+	<insert id="insert" parameterType="User">
+		insert into
+		USER(name,pass,address,age,phone,power,sex
+		)values(#{name},#{pass},#{address},#{age},#{phone},#{power},#{sex})
+	</insert>
+	<delete id="delete" parameterType="User">
+		delete from USER where
+		id=#{id}
+	</delete>
+	<update id="update" parameterType="User">
+		update USER
+		<set>
+			<if test="name!=null and name!=''">name=#{name},</if>
+			<if test="pass!=null and pass!=''">pass=#{pass},</if>
+			<if test="address!=null and address!=''">address=#{address},</if>
+			<if test="age!=null and age!=''">age=#{age},</if>
+			<if test="phone!=null and phone!=''">phone=#{phone},</if>
+			<if test="power!=null and power!=''">power=#{power},</if>
+			<if test="sex!=null">sex=#{sex},</if>
+		</set>
+		<where>
+			id=#{id}
+		</where>
+	</update>
+	<select id="selectById" parameterType="User" resultMap="resultMap1">
+		select
+		<include refid="result"></include>
+		from USER where id=#{id}
+	</select>
+	<select id="selectByName" parameterType="User" resultMap="resultMap1">
+		select
+		<include refid="result"></include>
+		from USER where name=#{name}
+	</select>
+	<select id="selectByPower" parameterType="User" resultMap="resultMap1">
+		<if test="power==0 or power==1">
+			select
+			<include refid="result"></include>
+			from USER
+			<if test="power==1">
+				<where>
+					id=#{id}
+				</where>
+			</if>
+		</if>
+	</select>
+	<select id="slecteAll" parameterType="User" resultMap="resultMap1">
+		select
+		<include refid="result"></include>
+		from USER
+	</select>
+
+</mapper>

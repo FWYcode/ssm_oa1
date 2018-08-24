@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.LeaveMapper">
+	<sql id="result1">
+		id,begint,endt,days,state,reasons,revid,apid
+	</sql>
+	<resultMap type="Leaveren" id="resultMap">
+		<id column="ID" property="id" />
+		<result column="BEGINT" property="begint" />
+		<result column="ENDT" property="endt" />
+		<result column="DAYS" property="days" />
+		<result column="STATE" property="state" />
+		<result column="REASONS" property="reasons" />
+		<result column="REVID" property="revid" />
+		<result column="APID" property="apid" />
+	</resultMap>
+	<select id="selectByApid" resultMap="resultMap" parameterType="int">
+		select
+		<include refid="result1"></include>
+		from LEAVEREN where APID=#{id}
+	</select>
+	<select id="selectById" resultMap="resultMap" parameterType="int">
+		select
+		<include refid="result1"></include>
+		from LEAVEREN where ID=#{id}
+	</select>
+	<select id="selectByRevid" resultMap="resultMap" parameterType="int">
+		select
+		<include refid="result1"></include>
+		from LEAVEREN where REVID=#{id}
+	</select>
+	<insert id="insertLeave" parameterType="Leaveren">
+		insert into
+		LEAVEREN
+		(BEGINT,ENDT,DAYS,STATE,REASONS,REVID,APID)values(#{begint},#{endt},#{days},#{state},#{reasons},#{revid},#{apid})
+	</insert>
+	<update id="update" parameterType="Leaveren">
+		update LEAVEREN set
+		STATE=#{state} where ID=#{id}
+	</update>
+</mapper>
